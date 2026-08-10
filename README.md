@@ -2,7 +2,11 @@
 
 Dualcast is a native OBS Studio plugin for independently streaming the current OBS program mix to YouTube Live and TikTok LIVE-compatible RTMP/RTMPS ingest destinations.
 
-This repository currently implements the production foundation and first usable output path:
+This repository currently contains the Dualcast source release and production foundation. It is not a replacement for OBS.
+
+The current release is source-only because the normal OBS installer does not ship the OBS development SDK or Qt development files required to compile a native plugin. A compiled Windows `.dll` is not included yet.
+
+Implemented foundation:
 
 - A dockable `Docks → Dualcast` Qt/OBS frontend panel.
 - Independent YouTube and TikTok manual RTMP/RTMPS destinations.
@@ -24,7 +28,19 @@ cmake --build build --config RelWithDebInfo
 ctest --test-dir build -C RelWithDebInfo --output-on-failure
 ```
 
-Install the resulting `Dualcast.dll` under the OBS plugin directory and copy `resources` under OBS's `data/obs-plugins/Dualcast` directory. Use an OBS development package or the official OBS plugin-template dependency workflow when producing a release package.
+Install the resulting `Dualcast.dll` under OBS's 64-bit plugin directory and copy `resources/locale/en-US.ini` into the matching Dualcast data directory. The recommended per-user layout is:
+
+```text
+C:\ProgramData\obs-studio\plugins\Dualcast\
+  bin\64bit\Dualcast.dll
+  data\locale\en-US.ini
+```
+
+Close OBS before copying the files, then reopen it and choose `Docks -> Dualcast`.
+
+## Releases
+
+The GitHub release contains the complete source archive. It is intended for developers who have the matching OBS development SDK. A binary release will require a successful Windows build against a supported OBS SDK and will be published separately.
 
 ## Platform and API boundaries
 
