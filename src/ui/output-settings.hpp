@@ -3,6 +3,10 @@
 #include "config/configuration.hpp"
 
 #include <QDialog>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QSpinBox>
 
 namespace dualcast {
 
@@ -19,16 +23,16 @@ private slots:
 private:
   Platform platform_;
   DestinationConfig configuration_;
-  class QLineEdit *serverEdit_ = nullptr;
-  class QLineEdit *keyEdit_ = nullptr;
-  class QSpinBox *widthEdit_ = nullptr;
-  class QSpinBox *heightEdit_ = nullptr;
-  class QSpinBox *fpsEdit_ = nullptr;
-  class QSpinBox *bitrateEdit_ = nullptr;
-  class QSpinBox *audioEdit_ = nullptr;
-  class QSpinBox *keyframeEdit_ = nullptr;
-  class QComboBox *encoderEdit_ = nullptr;
-  class QCheckBox *automaticEdit_ = nullptr;
+  QLineEdit *serverEdit_ = nullptr;
+  QLineEdit *keyEdit_ = nullptr;
+  QSpinBox *widthEdit_ = nullptr;
+  QSpinBox *heightEdit_ = nullptr;
+  QSpinBox *fpsEdit_ = nullptr;
+  QSpinBox *bitrateEdit_ = nullptr;
+  QSpinBox *audioEdit_ = nullptr;
+  QSpinBox *keyframeEdit_ = nullptr;
+  QComboBox *encoderEdit_ = nullptr;
+  QCheckBox *automaticEdit_ = nullptr;
 };
 
 } // namespace dualcast

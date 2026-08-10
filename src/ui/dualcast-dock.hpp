@@ -3,6 +3,9 @@
 #include "config/configuration.hpp"
 
 #include <QWidget>
+#include <QCheckBox>
+#include <QLabel>
+#include <QPushButton>
 
 #include <memory>
 
@@ -37,16 +40,16 @@ private:
   std::unique_ptr<YouTubeProvider> youtube_;
   std::unique_ptr<TikTokProvider> tiktok_;
   std::unique_ptr<OutputManager> outputs_;
-  class QLabel *youtubeStatus_ = nullptr;
-  class QLabel *tiktokStatus_ = nullptr;
-  class QLabel *bandwidth_ = nullptr;
-  class QLabel *encoderPlan_ = nullptr;
-  class QCheckBox *youtubeEnabled_ = nullptr;
-  class QCheckBox *tiktokEnabled_ = nullptr;
-  class QPushButton *startAllButton_ = nullptr;
-  class QPushButton *stopAllButton_ = nullptr;
-  class QPushButton *youtubeStartButton_ = nullptr;
-  class QPushButton *tiktokStartButton_ = nullptr;
+  QLabel *youtubeStatus_ = nullptr;
+  QLabel *tiktokStatus_ = nullptr;
+  QLabel *bandwidth_ = nullptr;
+  QLabel *encoderPlan_ = nullptr;
+  QCheckBox *youtubeEnabled_ = nullptr;
+  QCheckBox *tiktokEnabled_ = nullptr;
+  QPushButton *startAllButton_ = nullptr;
+  QPushButton *stopAllButton_ = nullptr;
+  QPushButton *youtubeStartButton_ = nullptr;
+  QPushButton *tiktokStartButton_ = nullptr;
   std::unique_ptr<StreamHealthWidget> youtubeHealth_;
   std::unique_ptr<StreamHealthWidget> tiktokHealth_;
 

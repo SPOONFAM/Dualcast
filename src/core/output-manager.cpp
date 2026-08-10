@@ -5,7 +5,7 @@
 #include "core/encoder-manager.hpp"
 
 #include <obs.h>
-#include <util/callback/signal.h>
+#include <callback/signal.h>
 
 #include <QDateTime>
 #include <QMetaObject>
@@ -37,7 +37,7 @@ int indexFor(Platform platform)
 
 void logPlatform(Platform platform, const char *message)
 {
-  obs_log(LOG_INFO, "[Dualcast] %s %s", platform == Platform::YouTube ? "YouTube" : "TikTok", message);
+  blog(LOG_INFO, "[Dualcast] %s %s", platform == Platform::YouTube ? "YouTube" : "TikTok", message);
 }
 
 void queueStatus(OutputManager *manager)
@@ -133,11 +133,11 @@ bool OutputManager::createSlot(Platform platform, const DualcastConfiguration &c
   obs_output_set_audio_encoder(newSlot->output, newSlot->audioEncoder, 0);
   newSlot->encoderName = EncoderManager::displayName(encoderId);
 
-  signal_handler_t *signals = obs_output_get_signal_handler(newSlot->output);
-  signal_handler_connect(signals, "start", &OutputManager::onStart, newSlot.get());
-  signal_handler_connect(signals, "stop", &OutputManager::onStop, newSlot.get());
-  signal_handler_connect(signals, "reconnect", &OutputManager::onReconnect, newSlot.get());
-  signal_handler_connect(signals, "reconnect_success", &OutputManager::onReconnectSuccess, newSlot.get());
+  signal_handler_t *handler = obs_output_get_signal_handler(newSlot->output);
+  signal_handler_connect(handler, "start", &OutputManager::onStart, newSlot.get());
+  signal_handler_connect(handler, "stop", &OutputManager::onStop, newSlot.get());
+  signal_handler_connect(handler, "reconnect", &OutputManager::onReconnect, newSlot.get());
+  signal_handler_connect(handler, "reconnect_success", &OutputManager::onReconnectSuccess, newSlot.get());
 
   slots_[indexFor(platform)] = std::move(newSlot);
   return true;
@@ -214,11 +214,11 @@ void OutputManager::releaseSlot(Platform platform)
   if (target->output && obs_output_active(target->output))
     obs_output_force_stop(target->output);
   if (target->output) {
-    auto *signals = obs_output_get_signal_handler(target->output);
-    signal_handler_disconnect(signals, "start", &OutputManager::onStart, target.get());
-    signal_handler_disconnect(signals, "stop", &OutputManager::onStop, target.get());
-    signal_handler_disconnect(signals, "reconnect", &OutputManager::onReconnect, target.get());
-    signal_handler_disconnect(signals, "reconnect_success", &OutputManager::onReconnectSuccess, target.get());
+    auto *handler = obs_output_get_signal_handler(target->output);
+    signal_handler_disconnect(handler, "start", &OutputManager::onStart, target.get());
+    signal_handler_disconnect(handler, "stop", &OutputManager::onStop, target.get());
+    signal_handler_disconnect(handler, "reconnect", &OutputManager::onReconnect, target.get());
+    signal_handler_disconnect(handler, "reconnect_success", &OutputManager::onReconnectSuccess, target.get());
   }
   if (target->videoEncoder) obs_encoder_release(target->videoEncoder);
   if (target->audioEncoder) obs_encoder_release(target->audioEncoder);

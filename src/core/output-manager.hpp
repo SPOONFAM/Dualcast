@@ -3,7 +3,7 @@
 #include "config/configuration.hpp"
 
 #include <obs.h>
-#include <util/callback/calldata.h>
+#include <callback/calldata.h>
 
 #include <QObject>
 #include <QTimer>

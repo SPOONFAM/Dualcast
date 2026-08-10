@@ -29,15 +29,13 @@ LayoutEditor::LayoutEditor(QWidget *parent) : QDialog(parent)
   scene->addRect(0, 0, 360, 640, QPen(Qt::gray), QBrush(QColor(30, 30, 30)));
   auto *view = new QGraphicsView(scene, splitter);
   view->setFixedSize(400, 680);
-  auto *currentScenes = obs_frontend_get_scenes();
-  if (currentScenes) {
-    for (size_t i = 0; currentScenes[i]; ++i) {
-      const char *name = obs_source_get_name(currentScenes[i]);
+  obs_frontend_source_list currentScenes = {};
+  obs_frontend_get_scenes(&currentScenes);
+  for (size_t i = 0; i < currentScenes.sources.num; ++i) {
+      const char *name = obs_source_get_name(currentScenes.sources.array[i]);
       if (name) sources->addItem(QString::fromUtf8(name));
-      obs_source_release(currentScenes[i]);
-    }
-    bfree(currentScenes);
   }
+  obs_frontend_source_list_free(&currentScenes);
   splitter->addWidget(sources);
   splitter->addWidget(view);
   root->addWidget(splitter, 1);

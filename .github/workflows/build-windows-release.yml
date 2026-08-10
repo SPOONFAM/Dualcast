@@ -1,0 +1,53 @@
+name: Build Windows plugin release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing release tag to attach the Windows DLL to
+        required: true
+        default: v0.1.0
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-2022
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Configure
+        shell: pwsh
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DDUALCAST_BUILD_TESTS=ON
+
+      - name: Build
+        shell: pwsh
+        run: cmake --build build --config RelWithDebInfo --parallel
+
+      - name: Test core
+        shell: pwsh
+        run: ctest --test-dir build -C RelWithDebInfo --output-on-failure
+
+      - name: Stage plugin DLL
+        shell: pwsh
+        run: |
+          $dll = Get-ChildItem -Path build -Filter Dualcast.dll -File -Recurse |
+            Where-Object { $_.FullName -notmatch '\\CMakeFiles\\' } |
+            Select-Object -First 1
+          if ($null -eq $dll) {
+            throw 'Dualcast.dll was not produced by the build.'
+          }
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          Copy-Item -LiteralPath $dll.FullName -Destination release/Dualcast.dll
+
+      - name: Attach DLL to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          files: release/Dualcast.dll
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

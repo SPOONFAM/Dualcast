@@ -1,4 +1,6 @@
 /build/
+/build-*/
+/\.deps/
 /out/
 /.vs/
 *.user

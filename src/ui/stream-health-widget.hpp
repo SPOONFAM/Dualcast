@@ -3,6 +3,7 @@
 #include "core/output-manager.hpp"
 
 #include <QWidget>
+#include <QLabel>
 
 namespace dualcast {
 
@@ -14,8 +15,8 @@ public:
 
 private:
   Platform platform_;
-  class QLabel *state_ = nullptr;
-  class QLabel *metrics_ = nullptr;
+  QLabel *state_ = nullptr;
+  QLabel *metrics_ = nullptr;
 };
 
 } // namespace dualcast

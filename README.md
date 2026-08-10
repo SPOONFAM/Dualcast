@@ -2,9 +2,7 @@
 
 Dualcast is a native OBS Studio plugin for independently streaming the current OBS program mix to YouTube Live and TikTok LIVE-compatible RTMP/RTMPS ingest destinations.
 
-This repository currently contains the Dualcast source release and production foundation. It is not a replacement for OBS.
-
-The current release is source-only because the normal OBS installer does not ship the OBS development SDK or Qt development files required to compile a native plugin. A compiled Windows `.dll` is not included yet.
+This repository contains the Dualcast native plugin source and Windows release artifacts. It is not a replacement for OBS.
 
 Implemented foundation:
 
@@ -28,7 +26,7 @@ cmake --build build --config RelWithDebInfo
 ctest --test-dir build -C RelWithDebInfo --output-on-failure
 ```
 
-Install the resulting `Dualcast.dll` under OBS's 64-bit plugin directory and copy `resources/locale/en-US.ini` into the matching Dualcast data directory. The recommended per-user layout is:
+For the easiest install, download `Dualcast.dll` from the latest GitHub release. Close OBS, then place it under OBS's 64-bit plugin directory and copy `resources/locale/en-US.ini` into the matching Dualcast data directory. The recommended per-user layout is:
 
 ```text
 C:\ProgramData\obs-studio\plugins\Dualcast\
@@ -40,7 +38,9 @@ Close OBS before copying the files, then reopen it and choose `Docks -> Dualcast
 
 ## Releases
 
-The GitHub release contains the complete source archive. It is intended for developers who have the matching OBS development SDK. A binary release will require a successful Windows build against a supported OBS SDK and will be published separately.
+Each GitHub release includes the complete source archive and, once the Windows build passes, the compiled `Dualcast.dll`. The DLL is built against the OBS version listed in the release notes; use a matching 64-bit OBS Studio installation.
+
+The repository also includes a manually triggered GitHub Actions workflow that rebuilds and attaches the Windows DLL to a selected release tag.
 
 ## Platform and API boundaries
 

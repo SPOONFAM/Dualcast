@@ -25,11 +25,11 @@ bool obs_module_load(void)
   if (!obs_frontend_add_dock_by_id(kDockId, "Dualcast", g_dock)) {
     delete g_dock;
     g_dock = nullptr;
-    obs_log(LOG_ERROR, "[Dualcast] Could not register the Dualcast dock.");
+    blog(LOG_ERROR, "[Dualcast] Could not register the Dualcast dock.");
     return false;
   }
   obs_frontend_add_event_callback(onFrontendEvent, nullptr);
-  obs_log(LOG_INFO, "[Dualcast] loaded");
+  blog(LOG_INFO, "[Dualcast] loaded");
   return true;
 }
 
@@ -38,5 +38,5 @@ void obs_module_unload(void)
   obs_frontend_remove_event_callback(onFrontendEvent, nullptr);
   obs_frontend_remove_dock(kDockId);
   g_dock = nullptr;
-  obs_log(LOG_INFO, "[Dualcast] unloaded");
+  blog(LOG_INFO, "[Dualcast] unloaded");
 }

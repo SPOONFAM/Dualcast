@@ -1,6 +1,26 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(Dualcast VERSION 0.1.0 LANGUAGES CXX)
+include(FetchContent)
+
+FetchContent_Declare(
+  obs_plugin_template
+  GIT_REPOSITORY https://github.com/obsproject/obs-plugintemplate.git
+  GIT_TAG 3e7d7ac3b5342cd7d9b88890b9c70b472d1520fc
+  GIT_SHALLOW TRUE
+)
+FetchContent_GetProperties(obs_plugin_template)
+if(NOT obs_plugin_template_POPULATED)
+  FetchContent_Populate(obs_plugin_template)
+endif()
+
+list(APPEND CMAKE_MODULE_PATH
+  "${obs_plugin_template_SOURCE_DIR}/cmake/common"
+  "${obs_plugin_template_SOURCE_DIR}/cmake/windows"
+)
+
+include("${obs_plugin_template_SOURCE_DIR}/cmake/common/bootstrap.cmake" NO_POLICY_SCOPE)
+
+project(${_name} VERSION ${_version} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,6 +33,13 @@ set(DUALCAST_GOOGLE_CLIENT_ID "" CACHE STRING "Google OAuth client id for the Yo
 if(DUALCAST_OBS_DIR)
   list(PREPEND CMAKE_PREFIX_PATH "${DUALCAST_OBS_DIR}")
 endif()
+
+option(ENABLE_FRONTEND_API "Use obs-frontend-api for UI functionality" ON)
+option(ENABLE_QT "Use Qt functionality" ON)
+
+include(compilerconfig)
+include(defaults)
+include(helpers)
 
 find_package(libobs REQUIRED)
 find_package(obs-frontend-api REQUIRED)
@@ -60,6 +87,8 @@ if(MSVC)
 else()
   target_compile_options(Dualcast PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+set_target_properties_plugin(Dualcast PROPERTIES OUTPUT_NAME Dualcast)
 
 install(TARGETS Dualcast LIBRARY DESTINATION obs-plugins/64bit RUNTIME DESTINATION obs-plugins/64bit)
 install(DIRECTORY resources/ DESTINATION data/obs-plugins/Dualcast)
